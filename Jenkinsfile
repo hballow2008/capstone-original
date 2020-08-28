@@ -22,7 +22,7 @@ pipeline {
               steps {
                   withDockerRegistry([url: "", credentialsId: "dockerhub"]) {
                       sh "docker tag capstone-project hballow/capstone-project"
-                      sh 'docker push hbalow/capstone-project'
+                      sh 'docker push hballow/capstone-project'
                   }
               }
          }
