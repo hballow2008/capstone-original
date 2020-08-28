@@ -13,24 +13,20 @@ pipeline {
                   sh 'tidy -q -e *.html'
               }
          }
-
-         stage('Build image') {
+         stage('Build Docker Image') {
               steps {
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker_id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
-                    sh 'docker build -t capstone-project .'
-                }
+                  sh 'docker build -t capstone-project .'
               }
          }
-         stage('Push Image To Dockerhub') {
+         stage('Push Docker Image') {
               steps {
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker_id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
-                  sh '''
-                    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-                    docker push hballow/capstone-project
-                  '''
-                }
+                  withDockerRegistry([url: "", credentialsId: "docker-hub"]) {
+                      sh "docker tag capstone-project-cloud-devops hballow/capstone-project"
+                      sh 'docker push hbalow/capstone-project'
+                  }
               }
          }
+ 
          stage('Deploying') {
               steps{
                   echo 'Deploying to AWS...'
