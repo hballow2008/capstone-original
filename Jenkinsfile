@@ -13,9 +13,12 @@ pipeline {
                   sh 'tidy -q -e *.html'
               }
          }
-         stage('Build Docker Image') {
+
+         stage('Build image') {
               steps {
-                  sh 'docker build -t capstone-project .'
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker_id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
+                    sh 'docker build -t capstone-project .'
+                }
               }
          }
          stage('Push Image To Dockerhub') {
