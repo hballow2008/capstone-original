@@ -18,12 +18,14 @@ pipeline {
                   sh 'docker build -t capstone-project .'
               }
          }
-         stage('Push Docker Image') {
+         stage('Push Image To Dockerhub') {
               steps {
-                  withDockerRegistry([url: "", credentialsId: "docker-hub"]) {
-                      sh "docker tag capstone-project hballow/capstone-project"
-                      sh 'docker push hballow/capstone-project'
-                  }
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker_id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
+                  sh '''
+                    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+                    docker push hballow/capstone-project
+                  '''
+                }
               }
          }
          stage('Deploying') {
