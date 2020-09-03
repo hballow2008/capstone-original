@@ -5,9 +5,7 @@ pipeline {
               steps {
                   sh 'echo Building...'
               }
-         }
-          
-         
+         }        
          stage('Lint HTML') {
               steps {
                   sh 'tidy -q -e *.html'
@@ -38,6 +36,9 @@ pipeline {
                       sh "kubectl get deployment"
                       sh "kubectl get pod -o wide"
                       sh "kubectl get service/capstone-project"
+                  }
+              }
+         }
 
         stage("Cleaning up") {
               steps{
