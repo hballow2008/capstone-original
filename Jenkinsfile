@@ -31,11 +31,7 @@ pipeline {
                   withAWS(credentials: 'aws-credentials', region: 'us-east-2') {
                       sh "aws eks --region us-east-2 update-kubeconfig --name capstonecluster"
                       sh "kubectl config use-context arn:aws:eks:us-east-2:725326878966:cluster/capstonecluster"
-                      sh "kubectl apply -f rolling deployment/deployment.yml"
-                      sh "kubectl get nodes"
-                      sh "kubectl get deployment"
-                      sh "kubectl get pod -o wide"
-                      sh "kubectl get service/capstone-project"
+
                   }
               }
          }
